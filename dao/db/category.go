@@ -33,6 +33,7 @@ func GetCategoryById(id int64) (category *model.Category, err error) {
 //	获取多个文章分类
 func GetCategoryList(categoryIds []int64) (categories []*model.Category, err error) {
 	//	构建 sql 语句
+	log.Println("categoryIds: ", categoryIds)
 	sqlStr, args, err := sqlx.In(`select id, category_name, category_no from category where id in(?)`, categoryIds)
 	if err != nil {
 		log.Fatalln("sqlx in failed, err: ", err)
@@ -48,8 +49,8 @@ func GetCategoryList(categoryIds []int64) (categories []*model.Category, err err
 
 //	获取所有文章分类
 func GetAllCategory() (categories []*model.Category, err error) {
-	sqlStr := `select id, category_name, category_no from category order by category_no asc ?`
-	err = db.Get(categories, sqlStr, id)
+	sqlStr := `select id, category_name, category_no from category order by category_no asc`
+	err = db.Select(&categories, sqlStr)
 	if err != nil {
 		log.Fatalln("get data failed, err: ", err)
 		return
