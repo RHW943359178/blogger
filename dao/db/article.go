@@ -1,6 +1,10 @@
 package db
 
-import "blogger/model"
+import (
+	"blogger/model"
+	"github.com/jmoiron/sqlx"
+	"log"
+)
 
 //	插入文章
 func InsertArticle(article *model.ArticleDetail) (articleId int64, err error) {
@@ -18,16 +22,43 @@ func InsertArticle(article *model.ArticleDetail) (articleId int64, err error) {
 	return
 }
 
-//	获取文章列表，分页
-func GetArticleList(pageNum, pageSize int) (articleList []*model.ArticleInfo, err error) {
+//	获取文章列表(分页，分类)
+func GetArticleList(condition string, categoryId []string, pageNum, pageSize int) (articleList []*model.ArticleInfo, err error) {
+	//	返回值切片初始化
+	articleList = make([]*model.ArticleInfo, 0)
 	//	参数验证
-	if pageNum <= 0 || pageSize <= 0 {
+	//log.Println(len(categoryId), 12)
+	if pageNum < 0 || pageSize <= 0 {
 		return
 	}
-	//	时间降序排列
-	sqlStr := `select id, summary, title, view_count, create_time, comment_count, username
-				from article where status = 1 order by create_time desc limit ?, ?`
-	err = db.Select(&articleList, sqlStr, pageNum, pageSize)
+	//	判断category的值，如果为0则查全部分类的文章
+	log.Println(len(categoryId), 12)
+	var sqlStr string
+	if len(categoryId) != 0 {
+		sqlStr, args, err := sqlx.In(`select
+					id, summary, category_id, title, view_count, create_time, comment_count, username
+				from article
+				where category_id in (?) and title like concat('%', ?, '%')
+				order by create_time desc limit ?, ?`, categoryId, condition, pageNum, pageSize)
+		if err != nil {
+			log.Fatalln("err", err)
+			//return
+		}
+		//sqlStr = `select
+		//			id, summary, category_id, title, view_count, create_time, comment_count, username
+		//		from article
+		//		where category_id in (?) and title like concat('%', ?) or title like concat(?, '%')
+		//		order by create_time desc limit ?, ?`
+		err = db.Select(&articleList, sqlStr, args...)
+	} else {
+		sqlStr = `select
+					id, summary, category_id, title, view_count, create_time, comment_count, username
+				from article
+				where title like concat('%', ?, '%')
+				order by create_time desc limit ?, ?`
+		err = db.Select(&articleList, sqlStr, condition, pageNum, pageSize)
+	}
+	log.Println(articleList, "&articleList")
 	if err != nil {
 		return
 	}

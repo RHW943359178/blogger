@@ -37,8 +37,9 @@ func TestInsertArticle(t *testing.T) {
 }
 
 func TestGetArticleList(t *testing.T) {
-	articleList, err := GetArticleList(1, 10)
+	articleList, err := GetArticleList("5qi", 1, 0, 10)
 	if err != nil {
+		t.Log("err: ", err)
 		return
 	}
 	t.Logf("article: %d\n", len(articleList))

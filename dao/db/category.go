@@ -49,7 +49,7 @@ func GetCategoryList(categoryIds []int64) (categories []*model.Category, err err
 
 //	获取所有文章分类
 func GetAllCategory() (categories []*model.Category, err error) {
-	sqlStr := `select id, category_name, category_no from category order by category_no asc`
+	sqlStr := `select category_id, category_name, color, category_no from category order by category_no asc`
 	err = db.Select(&categories, sqlStr)
 	if err != nil {
 		log.Fatalln("get data failed, err: ", err)

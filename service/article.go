@@ -8,40 +8,40 @@ import (
 
 //	获取文章和对应的分类
 func GetArticleRecordList(pageNum, pageSize int) (articleRecordList []*model.ArticleRecord, err error) {
-	//	1.获取文章列表
-	articleInfoList, err := db.GetArticleList(pageNum, pageSize)
-	if err != nil {
-		log.Fatalln(err)
-		return
-	}
-	if len(articleInfoList) <= 0 {
-		return
-	}
-	//	2.获取文章对应的分类 (多个)
-	categoryIds := getCategoryIds(articleInfoList)
-	categoryList, err := db.GetCategoryList(categoryIds)
-	if err != nil {
-		log.Fatalln(err)
-		return
-	}
-	//	返回页面，做聚合
-	//	遍历所有文章
-	for _, article := range articleInfoList {
-		//	根据当前文章，生成结构体
-		articleRecord := &model.ArticleRecord{
-			ArticleInfo: *article,
-		}
-		//	文章取出分类id
-		categoryId := article.CategoryId
-		//	遍历分类列表
-		for _, category := range categoryList {
-			if categoryId == category.CategoryId {
-				articleRecord.Category = *category
-				break
-			}
-		}
-		articleRecordList = append(articleRecordList, articleRecord)
-	}
+	////	1.获取文章列表
+	//articleInfoList, err := db.GetArticleList(pageNum, pageSize)
+	//if err != nil {
+	//	log.Fatalln(err)
+	//	return
+	//}
+	//if len(articleInfoList) <= 0 {
+	//	return
+	//}
+	////	2.获取文章对应的分类 (多个)
+	//categoryIds := getCategoryIds(articleInfoList)
+	//categoryList, err := db.GetCategoryList(categoryIds)
+	//if err != nil {
+	//	log.Fatalln(err)
+	//	return
+	//}
+	////	返回页面，做聚合
+	////	遍历所有文章
+	//for _, article := range articleInfoList {
+	//	//	根据当前文章，生成结构体
+	//	articleRecord := &model.ArticleRecord{
+	//		ArticleInfo: *article,
+	//	}
+	//	//	文章取出分类id
+	//	categoryId := article.CategoryId
+	//	//	遍历分类列表
+	//	for _, category := range categoryList {
+	//		if categoryId == category.CategoryId {
+	//			articleRecord.Category = *category
+	//			break
+	//		}
+	//	}
+	//	articleRecordList = append(articleRecordList, articleRecord)
+	//}
 	return
 }
 
@@ -99,6 +99,19 @@ func GetArticleRecordListById(categoryId, pageNum, pageSize int) (articleRecordL
 			}
 		}
 		articleRecordList = append(articleRecordList, articleRecord)
+	}
+	return
+}
+
+//	根据条件获取相应的文章列表（分类，页码）
+func GetArticleListByCondition(condition string, categoryId []string, pageNum, pageSize int) (articleList []*model.ArticleInfo, err error) {
+	//	数据库的顺序从0开始
+	pageNum -= 1
+	//	从 dao 层取出数据
+	articleList, err = db.GetArticleList(condition, categoryId, pageNum, pageSize)
+	if err != nil {
+		log.Fatalln(err)
+		return
 	}
 	return
 }

@@ -16,6 +16,8 @@ func Init(dns string) (err error) {
 		fmt.Println("connect to database failed, err: ", err)
 		return
 	}
+	//	设置最大连接数
+	db.SetMaxOpenConns(1)
 	//	查看是否连接成功
 	err = db.Ping()
 	if err != nil {
