@@ -99,3 +99,19 @@ func GetAllArticleList(c *gin.Context) {
 	})
 
 }
+
+//	@Tags 文章保存
+//	@Accept application/json
+//	@Produce application/json
+//  @Param title body string true "文章标题"
+//  @Param summary body string false "文章梗概"
+//  @Param categoryId body int true "所属分类id"
+//  @Param content body string true "文章内容"
+//  @Param username body string true "文章作者名称"
+//  @Param viewCount body int true "浏览数"
+//  @Param commentCount body int true "评论数"
+//  @Success 200 {object} ResponseArticle
+//  @Router /home/article/save [post]
+func HandleArticleSave(c *gin.Context) {
+
+}

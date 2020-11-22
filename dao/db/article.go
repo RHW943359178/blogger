@@ -44,11 +44,6 @@ func GetArticleList(condition string, categoryId []string, pageNum, pageSize int
 			log.Fatalln("err", err)
 			//return
 		}
-		//sqlStr = `select
-		//			id, summary, category_id, title, view_count, create_time, comment_count, username
-		//		from article
-		//		where category_id in (?) and title like concat('%', ?) or title like concat(?, '%')
-		//		order by create_time desc limit ?, ?`
 		err = db.Select(&articleList, sqlStr, args...)
 	} else {
 		sqlStr = `select

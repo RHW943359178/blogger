@@ -19,4 +19,9 @@ func VisitHomeInterface(r *gin.Engine) {
 	获取文章分类列表
 	*/
 	group.GET("/article", controller.GetAllArticleList)
+
+	/**
+	插入文章
+	*/
+	group.POST("/article/save", controller.HandleArticleSave)
 }

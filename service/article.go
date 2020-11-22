@@ -115,3 +115,8 @@ func GetArticleListByCondition(condition string, categoryId []string, pageNum, p
 	}
 	return
 }
+
+//	保存用户的文章信息
+func ArticleSave(title, summary, content, username string, categoryId, viewCount, commentCount int) (articleId int64, err error) {
+	db.InsertArticle()
+}

@@ -15,3 +15,10 @@ type ResponseArticleList struct {
 	Message string               `json:"message"` // 提示信息
 	Data    []*model.ArticleInfo `json:"data"`    // 数据
 }
+
+//	ResponseArticleSave	保存文章信息到数据库
+type ResponseArticle struct {
+	Code    int    `json:"code"`    //	业务响应状态码
+	Message string `json:"message"` //	提示信息
+	Data    int    `json:"data"`    //	数据
+}
