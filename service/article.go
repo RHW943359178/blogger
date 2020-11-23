@@ -117,6 +117,11 @@ func GetArticleListByCondition(condition string, categoryId []string, pageNum, p
 }
 
 //	保存用户的文章信息
-func ArticleSave(title, summary, content, username string, categoryId, viewCount, commentCount int) (articleId int64, err error) {
-	db.InsertArticle()
+func ArticleSave(article *model.ArticleDetail) (articleId int64, err error) {
+	articleId, err = db.InsertArticle(article)
+	if err != nil {
+		log.Fatalln("insert article failed", err)
+		return
+	}
+	return
 }

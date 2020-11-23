@@ -13,8 +13,8 @@ func InsertArticle(article *model.ArticleDetail) (articleId int64, err error) {
 		return
 	}
 	sqlStr := `insert into article(content, summary, title, username, category_id, view_count, comment_count) value(?,?,?,?,?,?,?)`
-	result, err := db.Exec(sqlStr, article.Content, article.Summary, article.Title, article.Username,
-		article.ViewCount, article.ArticleInfo.CategoryId, article.ViewCount)
+	result, err := db.Exec(sqlStr, article.Content, article.ArticleInfo.Summary, article.ArticleInfo.Title, article.ArticleInfo.Username,
+		article.ArticleInfo.ViewCount, article.ArticleInfo.CategoryId, article.ArticleInfo.ViewCount)
 	if err != nil {
 		return
 	}
