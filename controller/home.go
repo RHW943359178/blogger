@@ -3,14 +3,11 @@ package controller
 import (
 	"blogger/model"
 	"blogger/service"
-	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"strconv"
 	"strings"
-	"time"
-
 	//"log"
 	"net/http"
 	//"strconv"
@@ -112,85 +109,94 @@ func GetAllArticleList(c *gin.Context) {
 //  @Param content body string true "文章内容"
 //  @Param username body string true "文章作者名称"
 //  @Param viewCount body int true "浏览数"
-//  @Param commentCount body int true "评论数"
-//  @Success 200 {object} ResponseArticle
-//  @Router /home/article/save [post]
+//  @Param commentCount body int true "评论数"Article
+////  @Router /home/article/save [post]
+//  @Success 200 {object} Response
 func HandleArticleSave(c *gin.Context) {
+	//fmt.Println(c.Request.Body, 123)
 	//c.JSON(http.StatusOK, gin.H{
 	//	"message": "hello",
 	//})
-	//	获取传入参数
 
+	//	获取传入参数
+	//c.PostForm()
 	//fmt.Printf("%v\n", c.Request.Body)
-	//// 根据请求body创建一个json解析器实例
-	decoder := json.NewDecoder(c.Request.Body)
-	//
-	////	用于存放参数key-value的map
-	var params map[string]interface{}
-	//
-	//// 解析参数 存入map
-	err := decoder.Decode(&params)
+	// 根据请求body创建一个json解析器实例
+	//decoder := json.NewDecoder(c.Request.Body)
+	////
+	//////	用于存放参数key-value的map
+	//var params map[string]interface{}
+	////
+	////// 解析参数 存入map
+	//err := decoder.Decode(&params)
+	//if err != nil {
+	//	log.Fatalln("decoder failed, err: ", err)
+	//	return
+	//}
+	////log.Println(decoder)
+	//title := params["title"]
+	//fmt.Println(title, 123)
+	//if title == "" {
+	//	log.Fatalln("文章标题不可为空")
+	//	return
+	//}
+	//summary := params["summary"]
+	//username := params["username"]
+	//if username == "" {
+	//	log.Fatalln("文章作者不可为空")
+	//	return
+	//}
+	//var categoryId int64 //	声明categoryId变量
+	//id := params["categoryId"]
+	//if id == "" {
+	//	log.Fatalln("所属分类不可为空")
+	//	return
+	//} else {
+	//	categoryId, _ = strconv.ParseInt(string(id), 10, 64)
+	//}
+	//var viewCount, commentCount uint32
+	//////view := c.PostForm("viewCount")
+	//view, _ := strconv.ParseUint(params["viewCount"], 10, 64)
+	//viewCount = uint32(view)
+	////
+	//comment, _ := strconv.ParseUint(params["commentCount"], 10, 64)
+	//commentCount = uint32(comment)
+	//content := params["content"]
+	//if content == "" {
+	//	log.Fatalln("文章内容不可为空")
+	//	return
+	//}
+	////	初始化结构体
+	//articleDetail := &model.ArticleDetail{
+	//	Content: content,
+	//	ArticleInfo: model.ArticleInfo{
+	//		CategoryId:   categoryId,
+	//		Summary:      summary,
+	//		Title:        title,
+	//		ViewCount:    viewCount,
+	//		CommentCount: commentCount,
+	//		Username:     username,
+	//		CreateTime:   time.Now(),
+	//	},
+	//}
+	var articleDetail *model.ArticleDetail
+	err := c.ShouldBind(articleDetail)
 	if err != nil {
-		log.Fatalln("decoder failed, err: ", err)
+		log.Fatalln("struct bind failed, err: ", err)
 		return
 	}
-	//log.Println(decoder)
-	title := params["title"]
-	fmt.Println(title, 123)
-	if title == "" {
-		log.Fatalln("文章标题不可为空")
-		return
-	}
-	summary := params["summary"]
-	username := params["username"]
-	if username == "" {
-		log.Fatalln("文章作者不可为空")
-		return
-	}
-	var categoryId int64 //	声明categoryId变量
-	id := params["categoryId"]
-	if id == "" {
-		log.Fatalln("所属分类不可为空")
-		return
-	} else {
-		categoryId, _ = strconv.ParseInt(id, 10, 64)
-	}
-	var viewCount, commentCount uint32
-	////view := c.PostForm("viewCount")
-	view, _ := strconv.ParseUint(params["viewCount"], 10, 64)
-	viewCount = uint32(view)
-	//
-	comment, _ := strconv.ParseUint(params["commentCount"], 10, 64)
-	commentCount = uint32(comment)
-	content := params["content"]
-	if content == "" {
-		log.Fatalln("文章内容不可为空")
-		return
-	}
-	//	初始化结构体
-	articleDetail := &model.ArticleDetail{
-		Content: content,
-		ArticleInfo: model.ArticleInfo{
-			CategoryId:   categoryId,
-			Summary:      summary,
-			Title:        title,
-			ViewCount:    viewCount,
-			CommentCount: commentCount,
-			Username:     username,
-			CreateTime:   time.Now(),
-		},
-	}
+	fmt.Printf("%v\n", *articleDetail)
 	//	从service层取数数据
-	insertId, err := service.ArticleSave(articleDetail)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
-		})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{
-		"code":    200,
-		"message": "保存文章成功！",
-		"data":    insertId,
-	})
+	//insertId, err := service.ArticleSave(articleDetail)
+	//if err != nil {
+	//	c.JSON(http.StatusInternalServerError, gin.H{
+	//		"message": err,
+	//	})
+	//	return
+	//}
+	//c.JSON(http.StatusOK, gin.H{
+	//	"code":    200,
+	//	"message": "保存文章成功！",
+	//	"data":    insertId,
+	//})
 }
