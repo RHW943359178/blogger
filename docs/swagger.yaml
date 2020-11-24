@@ -1,0 +1,110 @@
+definitions:
+  controller.ResponseArticleList:
+    properties:
+      code:
+        description: 业务响应状态码
+        type: integer
+      data:
+        description: 数据
+        items:
+          $ref: '#/definitions/model.ArticleInfo'
+        type: array
+      message:
+        description: 提示信息
+        type: string
+    type: object
+  controller.ResponseCategoryList:
+    properties:
+      code:
+        description: 业务响应状态码
+        type: integer
+      data:
+        description: 数据
+        items:
+          $ref: '#/definitions/model.Category'
+        type: array
+      message:
+        description: 提示信息
+        type: string
+    type: object
+  model.ArticleInfo:
+    properties:
+      categoryId:
+        type: integer
+      commentCount:
+        type: integer
+      createTime:
+        description: 时间
+        type: string
+      id:
+        type: integer
+      summary:
+        description: 文章摘要
+        type: string
+      title:
+        type: string
+      username:
+        type: string
+      viewCount:
+        type: integer
+    type: object
+  model.Category:
+    properties:
+      categoryId:
+        type: integer
+      categoryName:
+        type: string
+      categoryNo:
+        type: integer
+      color:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /home/article:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 查询条件
+        in: query
+        name: condition
+        type: string
+      - description: 分类id
+        in: query
+        name: categoryId
+        type: integer
+      - description: 页面数
+        in: query
+        name: pageNum
+        required: true
+        type: integer
+      - description: 页码范围
+        in: query
+        name: pageSize
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ResponseArticleList'
+      tags:
+      - 获取所有的文章列表
+  /home/category:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ResponseCategoryList'
+      tags:
+      - 获取所有的分类
+swagger: "2.0"
