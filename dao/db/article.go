@@ -36,7 +36,7 @@ func GetArticleList(condition string, categoryId []string, pageNum, pageSize int
 	var sqlStr string
 	if len(categoryId) != 0 {
 		sqlStr, args, err := sqlx.In(`select
-					id, summary, category_id, title, view_count, create_time, comment_count, username
+					id, summary, category_id, title, view_count, create_time, update_time, comment_count, username
 				from article
 				where category_id in (?) and title like concat('%', ?, '%')
 				order by create_time desc limit ?, ?`, categoryId, condition, pageNum, pageSize)
@@ -47,7 +47,7 @@ func GetArticleList(condition string, categoryId []string, pageNum, pageSize int
 		err = db.Select(&articleList, sqlStr, args...)
 	} else {
 		sqlStr = `select
-					id, summary, category_id, title, view_count, create_time, comment_count, username
+					id, summary, category_id, title, view_count, create_time, update_time, comment_count, username
 				from article
 				where title like concat('%', ?, '%')
 				order by create_time desc limit ?, ?`
