@@ -125,3 +125,14 @@ func ArticleSave(article *model.ArticleDetail) (articleId int64, err error) {
 	}
 	return
 }
+
+//	根据文章id获取单个文章信息
+func GetArticleInfoById(articleId int64) (article *model.ArticleDetail, err error) {
+	//	从数据库获取数据
+	article, err = db.GetArticleDetail(articleId)
+	if err != nil {
+		log.Fatalln("get data from database failed, err: ", err)
+		return
+	}
+	return
+}

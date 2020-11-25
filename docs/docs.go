@@ -152,7 +152,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseArticle"
+                            "type": "integer"
                         }
                     }
                 }
@@ -178,26 +178,33 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/home/getArticleById": {
+            "get": {
+                "tags": [
+                    "根据id获取单个文章信息"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "文章id",
+                        "name": "articleId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseGetSingleArticle"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "controller.ResponseArticle": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "description": "业务响应状态码",
-                    "type": "integer"
-                },
-                "data": {
-                    "description": "数据",
-                    "type": "integer"
-                },
-                "message": {
-                    "description": "提示信息",
-                    "type": "string"
-                }
-            }
-        },
         "controller.ResponseArticleList": {
             "type": "object",
             "properties": {
@@ -238,6 +245,35 @@ var doc = `{
                 }
             }
         },
+        "controller.ResponseGetSingleArticle": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "业务响应状态码",
+                    "type": "integer"
+                },
+                "data": {
+                    "description": "返回数据",
+                    "$ref": "#/definitions/model.ArticleDetail"
+                },
+                "message": {
+                    "description": "提示信息",
+                    "type": "string"
+                }
+            }
+        },
+        "model.ArticleDetail": {
+            "type": "object",
+            "properties": {
+                "articleInfo": {
+                    "$ref": "#/definitions/model.ArticleInfo"
+                },
+                "content": {
+                    "description": "文章内容",
+                    "type": "string"
+                }
+            }
+        },
         "model.ArticleInfo": {
             "type": "object",
             "properties": {
@@ -248,8 +284,8 @@ var doc = `{
                     "type": "integer"
                 },
                 "createTime": {
-                    "description": "时间",
-                    "type": "string"
+                    "description": "创建时间",
+                    "type": "object"
                 },
                 "id": {
                     "type": "integer"
@@ -260,6 +296,9 @@ var doc = `{
                 },
                 "title": {
                     "type": "string"
+                },
+                "updateTime": {
+                    "type": "object"
                 },
                 "username": {
                     "type": "string"

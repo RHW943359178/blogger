@@ -20,5 +20,12 @@ type ResponseArticleList struct {
 type ResponseArticle struct {
 	Code    int    `json:"code"`    //	业务响应状态码
 	Message string `json:"message"` //	提示信息
-	Data    int    `json:"data"`    //	数据
+	Data    int64  `json:"data"`    //	数据
+}
+
+//	ResponseGetSingleArticle 根据id获取单个文章信息
+type ResponseGetSingleArticle struct {
+	Code    int                  `json:"code"`    //	业务响应状态码
+	Message string               `json:"message"` //	提示信息
+	Data    *model.ArticleDetail `json:"data"`    //	返回数据
 }

@@ -1,16 +1,4 @@
 definitions:
-  controller.ResponseArticle:
-    properties:
-      code:
-        description: 业务响应状态码
-        type: integer
-      data:
-        description: 数据
-        type: integer
-      message:
-        description: 提示信息
-        type: string
-    type: object
   controller.ResponseArticleList:
     properties:
       code:
@@ -39,6 +27,26 @@ definitions:
         description: 提示信息
         type: string
     type: object
+  controller.ResponseGetSingleArticle:
+    properties:
+      code:
+        description: 业务响应状态码
+        type: integer
+      data:
+        $ref: '#/definitions/model.ArticleDetail'
+        description: 返回数据
+      message:
+        description: 提示信息
+        type: string
+    type: object
+  model.ArticleDetail:
+    properties:
+      articleInfo:
+        $ref: '#/definitions/model.ArticleInfo'
+      content:
+        description: 文章内容
+        type: string
+    type: object
   model.ArticleInfo:
     properties:
       categoryId:
@@ -46,8 +54,8 @@ definitions:
       commentCount:
         type: integer
       createTime:
-        description: 时间
-        type: string
+        description: 创建时间
+        type: object
       id:
         type: integer
       summary:
@@ -55,6 +63,8 @@ definitions:
         type: string
       title:
         type: string
+      updateTime:
+        type: object
       username:
         type: string
       viewCount:
@@ -158,7 +168,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.ResponseArticle'
+            type: integer
       tags:
       - 文章保存
   /home/category:
@@ -174,4 +184,19 @@ paths:
             $ref: '#/definitions/controller.ResponseCategoryList'
       tags:
       - 获取所有的分类
+  /home/getArticleById:
+    get:
+      parameters:
+      - description: 文章id
+        in: query
+        name: articleId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ResponseGetSingleArticle'
+      tags:
+      - 根据id获取单个文章信息
 swagger: "2.0"

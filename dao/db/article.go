@@ -2,6 +2,7 @@ package db
 
 import (
 	"blogger/model"
+	"fmt"
 	"github.com/jmoiron/sqlx"
 	"log"
 )
@@ -31,7 +32,7 @@ func GetArticleList(condition string, categoryId []string, pageNum, pageSize int
 	if pageNum < 0 || pageSize <= 0 {
 		return
 	}
-	//	判断category的值，如果为0则查全部分类的文章
+	//	判断category的值，如果为0则查全部分类的文章文章参数为空
 	log.Println(len(categoryId), 12)
 	var sqlStr string
 	if len(categoryId) != 0 {
@@ -53,7 +54,6 @@ func GetArticleList(condition string, categoryId []string, pageNum, pageSize int
 				order by create_time desc limit ?, ?`
 		err = db.Select(&articleList, sqlStr, condition, pageNum, pageSize)
 	}
-	log.Println(articleList, "&articleList")
 	if err != nil {
 		return
 	}
@@ -66,9 +66,14 @@ func GetArticleDetail(articleId int64) (articleDetail *model.ArticleDetail, err 
 	if articleId < 0 {
 		return
 	}
-	sqlStr := `select id, summary, title, view_count, content, create_time, comment_count, username, category_id
-				from article where id = ? and status = 1`
+	fmt.Println(articleId, 123)
+	sqlStr := `select id, summary, title, view_count, content, create_time, update_time, comment_count, username, category_id
+				from article where id = ?`
 	err = db.Get(articleDetail, sqlStr, articleId)
+	if err != nil {
+		log.Fatalln("db.Get failed, err: ", err)
+		return
+	}
 	return
 }
 

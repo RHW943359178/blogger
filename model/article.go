@@ -20,10 +20,9 @@ type ArticleInfo struct {
 //	用于文章详情页的实体
 //	为了提升效率
 type ArticleDetail struct {
-	ArticleInfo ArticleInfo
+	ArticleInfo
 	//	文章内容
-	Content string `db:"content"`
-	//Category
+	Content string `db:"content" json:"content"`
 }
 
 //	用于文章上下页

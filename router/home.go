@@ -24,4 +24,9 @@ func VisitHomeInterface(r *gin.Engine) {
 	插入文章
 	*/
 	group.POST("/article/save", controller.HandleArticleSave)
+
+	/**
+	根据文章id获取单个文章信息
+	*/
+	group.GET("/getArticleById", controller.HandleGetSingleArticle)
 }
