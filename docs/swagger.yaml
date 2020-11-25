@@ -1,4 +1,16 @@
 definitions:
+  controller.ResponseArticle:
+    properties:
+      code:
+        description: 业务响应状态码
+        type: integer
+      data:
+        description: 数据
+        type: integer
+      message:
+        description: 提示信息
+        type: string
+    type: object
   controller.ResponseArticleList:
     properties:
       code:
@@ -94,6 +106,61 @@ paths:
             $ref: '#/definitions/controller.ResponseArticleList'
       tags:
       - 获取所有的文章列表
+  /home/article/save:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 文章标题
+        in: body
+        name: title
+        required: true
+        schema:
+          type: string
+      - description: 文章梗概
+        in: body
+        name: summary
+        schema:
+          type: string
+      - description: 所属分类id
+        in: body
+        name: categoryId
+        required: true
+        schema:
+          type: integer
+      - description: 文章内容
+        in: body
+        name: content
+        required: true
+        schema:
+          type: string
+      - description: 文章作者名称
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: 浏览数
+        in: body
+        name: viewCount
+        required: true
+        schema:
+          type: integer
+      - description: 评论数
+        in: body
+        name: commentCount
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ResponseArticle'
+      tags:
+      - 文章保存
   /home/category:
     get:
       consumes:

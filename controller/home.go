@@ -8,6 +8,8 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"time"
+
 	//"log"
 	"net/http"
 	//"strconv"
@@ -179,24 +181,51 @@ func HandleArticleSave(c *gin.Context) {
 	//		CreateTime:   time.Now(),
 	//	},
 	//}
-	var articleDetail *model.ArticleDetail
-	err := c.ShouldBind(articleDetail)
+	var articleBind model.ArticleBind
+	err := c.ShouldBind(&articleBind)
 	if err != nil {
 		log.Fatalln("struct bind failed, err: ", err)
 		return
 	}
-	fmt.Printf("%v\n", *articleDetail)
+	//	验证标题参数
+	if articleBind.Title == "" {
+		log.Fatalln("标题参数为空")
+		return
+	}
+	//	验证作者姓名参数
+	if articleBind.Username == "" {
+		log.Fatalln("文章作者参数为空")
+		return
+	}
+	//	验证文章内容参数
+	if articleBind.Content == "" {
+		log.Fatalln("文章作者参数为空")
+		return
+	}
+	//	初始化文章具体信息结构体
+	articleDetail := &model.ArticleDetail{
+		Content: articleBind.Content,
+		ArticleInfo: model.ArticleInfo{
+			CategoryId:   articleBind.CategoryId,
+			Summary:      articleBind.Summary,
+			Title:        articleBind.Title,
+			ViewCount:    articleBind.ViewCount,
+			CommentCount: articleBind.CommentCount,
+			Username:     articleBind.Username,
+			CreateTime:   time.Now(),
+		},
+	}
 	//	从service层取数数据
-	//insertId, err := service.ArticleSave(articleDetail)
-	//if err != nil {
-	//	c.JSON(http.StatusInternalServerError, gin.H{
-	//		"message": err,
-	//	})
-	//	return
-	//}
-	//c.JSON(http.StatusOK, gin.H{
-	//	"code":    200,
-	//	"message": "保存文章成功！",
-	//	"data":    insertId,
-	//})
+	insertId, err := service.ArticleSave(articleDetail)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"message": "保存文章成功！",
+		"data":    insertId,
+	})
 }
