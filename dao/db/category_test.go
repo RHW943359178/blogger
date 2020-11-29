@@ -5,7 +5,7 @@ import "testing"
 func init() {
 	//	parseTime=true 将mysql中时间类型，自动解析为 go 结构体中的时间类型
 	//	不加报错
-	dns := "root:123456@tcp(localhost:3306)/blogger?parseTime=True"
+	dns := "RHW:RHW943359178@tcp(81.69.255.188:3306)/blogger?parseTime=True"
 	err := Init(dns)
 	if err != nil {
 		panic(err)

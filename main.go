@@ -25,6 +25,7 @@ func main() {
 	}
 
 	router.VisitHomeInterface(r)
+	router.VisitUserInterface(r)
 
 	//	生成 swagger 文档
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))

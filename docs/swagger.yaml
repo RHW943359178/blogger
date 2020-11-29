@@ -41,11 +41,29 @@ definitions:
     type: object
   model.ArticleDetail:
     properties:
-      articleInfo:
-        $ref: '#/definitions/model.ArticleInfo'
+      categoryId:
+        type: integer
+      commentCount:
+        type: integer
       content:
         description: 文章内容
         type: string
+      createTime:
+        description: 创建时间
+        type: object
+      id:
+        type: integer
+      summary:
+        description: 文章摘要
+        type: string
+      title:
+        type: string
+      updateTime:
+        type: object
+      username:
+        type: string
+      viewCount:
+        type: integer
     type: object
   model.ArticleInfo:
     properties:
@@ -199,4 +217,57 @@ paths:
             $ref: '#/definitions/controller.ResponseGetSingleArticle'
       tags:
       - 根据id获取单个文章信息
+  /user/save:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户id
+        in: body
+        name: userId
+        required: true
+        schema:
+          type: string
+      - description: 用户姓名
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: 邮箱
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: 邮箱
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      tags:
+      - 用户信息保存
+  /user/username/select:
+    get:
+      parameters:
+      - description: 用户姓名
+        in: query
+        name: condition
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      tags:
+      - 查询数据库是否有已经注册
 swagger: "2.0"

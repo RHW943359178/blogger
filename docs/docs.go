@@ -202,6 +202,89 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/user/save": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户信息保存"
+                ],
+                "parameters": [
+                    {
+                        "description": "用户id",
+                        "name": "userId",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "用户姓名",
+                        "name": "username",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "邮箱",
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/username/select": {
+            "get": {
+                "tags": [
+                    "查询数据库是否有已经注册"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户姓名",
+                        "name": "condition",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -265,12 +348,38 @@ var doc = `{
         "model.ArticleDetail": {
             "type": "object",
             "properties": {
-                "articleInfo": {
-                    "$ref": "#/definitions/model.ArticleInfo"
+                "categoryId": {
+                    "type": "integer"
+                },
+                "commentCount": {
+                    "type": "integer"
                 },
                 "content": {
                     "description": "文章内容",
                     "type": "string"
+                },
+                "createTime": {
+                    "description": "创建时间",
+                    "type": "object"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "summary": {
+                    "description": "文章摘要",
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updateTime": {
+                    "type": "object"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "viewCount": {
+                    "type": "integer"
                 }
             }
         },

@@ -29,3 +29,10 @@ type ResponseGetSingleArticle struct {
 	Message string               `json:"message"` //	提示信息
 	Data    *model.ArticleDetail `json:"data"`    //	返回数据
 }
+
+//	ResponseUserInfo 用户校验返回用户信息
+type ResponseUserInfo struct {
+	Code    int            `json:"code"`    //	业务响应状态码
+	Message string         `json:"message"` //	提示信息
+	Data    *model.ResUser `json:"data"`    //	返回数据
+}
