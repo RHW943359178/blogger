@@ -13,6 +13,7 @@ require (
 	github.com/go-openapi/spec v0.19.14 // indirect
 	github.com/go-openapi/swag v0.19.12 // indirect
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
+	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/imdario/mergo v0.3.11 // indirect
