@@ -17,6 +17,22 @@ import (
 //	@BaseUrl localhost:8080
 func main() {
 	r := gin.Default()
+
+	////	生成 session 管理器对象
+	//mgr, err := session.CreateSessionMgr(session.Redis, "81.69.255.188:6379")
+	//if err != nil {
+	//	log.Fatalf("Create manager obj failed, err: %v\n", err)
+	//	return
+	//}
+	////	初始化 session 中间件
+	//sm := session.SessionMiddleware(mgr, session.Options{
+	//	Path:     "/",
+	//	Domain:   "81.69.255.188",
+	//	MaxAge:   120,
+	//	Secure:   false,
+	//	HttpOnly: true,
+	//})
+	//r.Use(sm)
 	//	初始化数据库连接
 	dns := "RHW:RHW943359178@tcp(81.69.255.188:3306)/blogger?parseTime=true"
 	err := db.Init(dns)

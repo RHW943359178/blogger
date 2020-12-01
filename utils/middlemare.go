@@ -1,12 +1,27 @@
 package utils
 
-import "github.com/gin-gonic/gin"
+import (
+	session "blogger/cookie_session"
+	"github.com/gin-gonic/gin"
+	"log"
+)
 
 /**
 cookie_session 中间件
 */
 func SessionMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-
+	//	生成 session 管理器对象
+	mgr, err := session.CreateSessionMgr(session.Redis, "81.69.255.188:6379")
+	if err != nil {
+		log.Fatalf("Create manager obj failed, err: %v\n", err)
 	}
+	//	初始化 session 中间件
+	sm := session.SessionMiddleware(mgr, session.Options{
+		Path:     "/",
+		Domain:   "81.69.255.188",
+		MaxAge:   120,
+		Secure:   false,
+		HttpOnly: true,
+	})
+	return sm
 }

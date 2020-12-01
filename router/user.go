@@ -2,6 +2,7 @@ package router
 
 import (
 	"blogger/controller"
+	"blogger/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,5 +22,5 @@ func VisitUserInterface(r *gin.Engine) {
 	/**
 	用户登录校验
 	*/
-	userGroup.POST("login/validate", controller.ValidateLoginStatus)
+	userGroup.POST("login/validate", utils.SessionMiddleware(), controller.ValidateLoginStatus)
 }

@@ -118,7 +118,8 @@ func ValidateLoginStatus(c *gin.Context) {
 		message = "用户名或密码错误"
 	} else {
 		message = "登录成功！"
-
+		//	登录成功之后存入session值
+		//c.MustGet()
 	}
 	//	构建返回消息 map
 	resData := map[string]interface{}{
