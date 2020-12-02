@@ -2,6 +2,7 @@ package main
 
 import (
 	"blogger/dao/db"
+	"blogger/dao/redis"
 	_ "blogger/docs"
 	"blogger/router"
 	"github.com/gin-gonic/gin"
@@ -33,9 +34,15 @@ func main() {
 	//	HttpOnly: true,
 	//})
 	//r.Use(sm)
-	//	初始化数据库连接
+	//	初始化 redis 数据库
+	rdn := "81.69.255.188:6379"
+	err := redis.InitClient(rdn)
+	if err != nil {
+		panic(err)
+	}
+	//	初始化 mysql 数据库连接
 	dns := "RHW:RHW943359178@tcp(81.69.255.188:3306)/blogger?parseTime=true"
-	err := db.Init(dns)
+	err = db.Init(dns)
 	if err != nil {
 		panic(err)
 	}

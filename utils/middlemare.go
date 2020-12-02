@@ -18,10 +18,10 @@ func SessionMiddleware() gin.HandlerFunc {
 	//	初始化 session 中间件
 	sm := session.SessionMiddleware(mgr, session.Options{
 		Path:     "/",
-		Domain:   "81.69.255.188",
-		MaxAge:   120,
+		Domain:   "localhost",
+		MaxAge:   60 * 60 * 24 * 30, //	秒钟
 		Secure:   false,
-		HttpOnly: true,
+		HttpOnly: false,
 	})
 	return sm
 }

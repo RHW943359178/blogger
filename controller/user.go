@@ -1,6 +1,7 @@
 package controller
 
 import (
+	session "blogger/cookie_session"
 	"blogger/model"
 	"blogger/service"
 	"blogger/utils"
@@ -93,13 +94,13 @@ func ValidateLoginStatus(c *gin.Context) {
 	}
 	//	校验用户名参数
 	if userBind.Username == "" {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "用户名不可为空",
 		})
 		return
 	}
 	if userBind.Password == "" {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "密码不可为空",
 		})
 		return
@@ -108,6 +109,7 @@ func ValidateLoginStatus(c *gin.Context) {
 	status, user := service.ValidateStatus(&userBind)
 	//	声明一个消息
 	var message string
+	//var count int
 	//	声明返回的数据
 	data := make(map[string]interface{}, 0)
 	data["status"] = status
@@ -119,7 +121,13 @@ func ValidateLoginStatus(c *gin.Context) {
 	} else {
 		message = "登录成功！"
 		//	登录成功之后存入session值
-		//c.MustGet()
+		sessionID := c.MustGet("sessionID").(string)
+		options := c.MustGet("options").(session.Options)
+		fmt.Printf("options: %#v\n", options)
+		fmt.Printf("options: %#v\n", sessionID)
+		//fmt.Printf("options: %#v\n", options)
+		c.SetCookie(session.SessionContextName, sessionID, options.MaxAge, options.Path, options.Domain, options.Secure, options.HttpOnly)
+		//defer sm.Clear(sessionID)
 	}
 	//	构建返回消息 map
 	resData := map[string]interface{}{
