@@ -8,8 +8,6 @@ import (
 	"log"
 	"strconv"
 	"strings"
-	"time"
-
 	//"log"
 	"net/http"
 	//"strconv"
@@ -94,53 +92,51 @@ func GetAllArticleList(c *gin.Context) {
 //  @Router /home/article/save [post]
 //  @Success 200 {object} int64
 func HandleArticleSave(c *gin.Context) {
-	var articleBind model.ArticleBind
+	var articleBind model.ArticleDetail
 	err := c.ShouldBind(&articleBind)
 	if err != nil {
 		log.Fatalln("struct bind failed, err: ", err)
 		return
 	}
 	//	验证标题参数
-	if articleBind.Title == "" {
-		log.Fatalln("标题参数为空")
-		return
-	}
-	//	验证作者姓名参数
-	if articleBind.Username == "" {
-		log.Fatalln("文章作者参数为空")
-		return
-	}
-	//	验证文章内容参数
-	if articleBind.Content == "" {
-		log.Fatalln("文章作者参数为空")
-		return
-	}
-	//	初始化文章具体信息结构体
-	articleDetail := &model.ArticleDetail{
-		Content: articleBind.Content,
-		ArticleInfo: model.ArticleInfo{
-			CategoryId:   articleBind.CategoryId,
-			Summary:      articleBind.Summary,
-			Title:        articleBind.Title,
-			ViewCount:    articleBind.ViewCount,
-			CommentCount: articleBind.CommentCount,
-			Username:     articleBind.Username,
-			CreateTime:   time.Now(),
-		},
-	}
-	//	从service层取数数据
-	insertId, err := service.ArticleSave(articleDetail)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
+	if articleBind.Title == "" || articleBind.Username == "" || articleBind.Content == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "请求参数有有误",
 		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"code":    200,
-		"message": "保存文章成功！",
-		"data":    insertId,
-	})
+	//	验证 session 值并从数据库匹配
+	sessionID := c.MustGet("sessionID").(string)
+
+	fmt.Println("sessionID: ", sessionID)
+
+	//	初始化文章具体信息结构体
+	//articleDetail := &model.ArticleDetail{
+	//	Content: articleBind.Content,
+	//	ArticleInfo: model.ArticleInfo{
+	//		CategoryId:   articleBind.CategoryId,
+	//		Summary:      articleBind.Summary,
+	//		Title:        articleBind.Title,
+	//		ViewCount:    articleBind.ViewCount,
+	//		CommentCount: articleBind.CommentCount,
+	//		Username:     articleBind.Username,
+	//		CreateTime:   time.Now(),
+	//	},
+	//}
+	//fmt.Printf("%#v\n", articleBind)
+	////	从service层取数数据
+	//insertId, err := service.ArticleSave(&articleBind)
+	//if err != nil {
+	//	c.JSON(http.StatusInternalServerError, gin.H{
+	//		"message": err,
+	//	})
+	//	return
+	//}
+	//c.JSON(http.StatusOK, gin.H{
+	//	"code":    200,
+	//	"message": "保存文章成功！",
+	//	"data":    insertId,
+	//})
 }
 
 //	@Tags 根据id获取单个文章信息

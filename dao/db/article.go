@@ -13,9 +13,9 @@ func InsertArticle(article *model.ArticleDetail) (articleId int64, err error) {
 	if article == nil {
 		return
 	}
-	sqlStr := `insert into article(content, summary, title, username, category_id, view_count, comment_count) value(?,?,?,?,?,?,?)`
-	result, err := db.Exec(sqlStr, article.Content, article.ArticleInfo.Summary, article.ArticleInfo.Title, article.ArticleInfo.Username,
-		article.ArticleInfo.ViewCount, article.ArticleInfo.CategoryId, article.ArticleInfo.ViewCount)
+	sqlStr := `insert into article(content, summary, title, user_id, username, category_id, view_count, open_flag, comment_count) value(?,?,?,?,?,?,?,?,?)`
+	result, err := db.Exec(sqlStr, article.Content, article.ArticleInfo.Summary, article.ArticleInfo.UserId, article.ArticleInfo.Title, article.ArticleInfo.Username,
+		article.ArticleInfo.ViewCount, article.ArticleInfo.CategoryId, article.ArticleInfo.OpenFlag, article.ArticleInfo.ViewCount)
 	if err != nil {
 		return
 	}

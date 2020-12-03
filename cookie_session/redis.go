@@ -90,16 +90,17 @@ func (r *redisSession) Save() {
 	if !r.modifyFlag {
 		return
 	}
-	buf := new(bytes.Buffer)
-	enc := gob.NewEncoder(buf)
-	err := enc.Encode(r.data)
-	if err != nil {
-		log.Fatalf("gob encode r.data failed, err: %v\n", err)
-		return
-	}
-
-	r.client.Set(r.id, buf.Bytes(), time.Second*time.Duration(r.expire))
-	log.Printf("set data %v to redis.\n", buf.Bytes())
+	//buf := new(bytes.Buffer)
+	//enc := gob.NewEncoder(buf)
+	//err := enc.Encode(r.data)
+	//if err != nil {
+	//	log.Fatalf("gob encode r.data failed, err: %v\n", err)
+	//	return
+	//}
+	fmt.Printf("data: %#v\n", r.data)
+	//var userId string
+	userInfo := r.data["userInfo"]
+	r.client.Set(r.id, userInfo, time.Second*time.Duration(r.expire))
 	r.modifyFlag = false
 }
 

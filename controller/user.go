@@ -120,14 +120,20 @@ func ValidateLoginStatus(c *gin.Context) {
 		message = "用户名或密码错误"
 	} else {
 		message = "登录成功！"
-		//	登录成功之后存入session值
+		//	获取 sessionId
 		sessionID := c.MustGet("sessionID").(string)
+		//	获取 options 配置
 		options := c.MustGet("options").(session.Options)
-		fmt.Printf("options: %#v\n", options)
-		fmt.Printf("options: %#v\n", sessionID)
-		//fmt.Printf("options: %#v\n", options)
+		//	获取 session 实例
+		redis := c.MustGet("session").(session.Session)
+		//	设置 redis 库的数据结构为：用户 session: 用户信息 userInfo
+		userInfo := make(map[string]string)
+		userInfo["username"] = user.Username
+		userInfo["userId"] = user.UserId
+
+		redis.Set("userInfo", userInfo)
+		data["session"] = sessionID
 		c.SetCookie(session.SessionContextName, sessionID, options.MaxAge, options.Path, options.Domain, options.Secure, options.HttpOnly)
-		//defer sm.Clear(sessionID)
 	}
 	//	构建返回消息 map
 	resData := map[string]interface{}{

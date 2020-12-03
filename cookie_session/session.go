@@ -97,11 +97,11 @@ func SessionMiddleware(sm SessionMgr, options Options) gin.HandlerFunc {
 		c.Set(SessionContextName, session)
 		c.Set("options", options)
 		c.Set("sessionID", sessionID)
+		c.Set("session", session)
+		defer sm.Clear(sessionID)
 		//c.SetCookie(SessionContextName, sessionID, options.MaxAge, options.Path, options.Domain, options.Secure, options.HttpOnly)
 
 		c.Next()
-		//defer sm.Clear(sessionID)
-
 		session.Save()
 	}
 }

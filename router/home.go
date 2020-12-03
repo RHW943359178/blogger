@@ -2,6 +2,7 @@ package router
 
 import (
 	"blogger/controller"
+	"blogger/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,7 +24,7 @@ func VisitHomeInterface(r *gin.Engine) {
 	/**
 	插入文章
 	*/
-	group.POST("/article/save", controller.HandleArticleSave)
+	group.POST("/article/save", utils.SessionMiddleware(), controller.HandleArticleSave)
 
 	/**
 	根据文章id获取单个文章信息

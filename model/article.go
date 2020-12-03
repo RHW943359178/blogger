@@ -15,6 +15,8 @@ type ArticleInfo struct {
 	CreateTime interface{} `db:"create_time" json:"createTime"`
 	UpdateTime interface{} `db:"update_time" json:"updateTime"`
 	Username   string      `db:"username" json:"username"`
+	UserId     string      `db:"user_id" json:"userId"`
+	OpenFlag   int         `db:"open_flag" json:"openFlag"`
 }
 
 //	用于文章详情页的实体
