@@ -3,6 +3,7 @@ package cookie_session
 import (
 	"bytes"
 	"encoding/gob"
+	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis"
 	uuid "github.com/satori/go.uuid"
@@ -100,7 +101,13 @@ func (r *redisSession) Save() {
 	fmt.Printf("data: %#v\n", r.data)
 	//var userId string
 	userInfo := r.data["userInfo"]
-	r.client.Set(r.id, userInfo, time.Second*time.Duration(r.expire))
+	//	将map转为字符串
+	user, err := json.Marshal(userInfo)
+	if err != nil {
+		log.Fatalln("marshal failed")
+		return
+	}
+	r.client.Set(r.id, user, time.Second*time.Duration(r.expire))
 	r.modifyFlag = false
 }
 

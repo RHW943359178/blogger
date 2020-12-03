@@ -89,7 +89,7 @@ func SessionMiddleware(sm SessionMgr, options Options) gin.HandlerFunc {
 			session, err = sm.GetSession(sessionID)
 			if err != nil {
 				log.Printf("Get seesion by %s failed, err: %v\n", sessionID, err)
-				session = sm.CreateSession()
+				//session = sm.CreateSession()
 				sessionID = session.ID()
 			}
 		}
@@ -98,7 +98,7 @@ func SessionMiddleware(sm SessionMgr, options Options) gin.HandlerFunc {
 		c.Set("options", options)
 		c.Set("sessionID", sessionID)
 		c.Set("session", session)
-		defer sm.Clear(sessionID)
+		//defer sm.Clear(sessionID)
 		//c.SetCookie(SessionContextName, sessionID, options.MaxAge, options.Path, options.Domain, options.Secure, options.HttpOnly)
 
 		c.Next()

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	session "blogger/cookie_session"
 	"blogger/model"
 	"blogger/service"
 	"fmt"
@@ -107,8 +108,17 @@ func HandleArticleSave(c *gin.Context) {
 	}
 	//	验证 session 值并从数据库匹配
 	sessionID := c.MustGet("sessionID").(string)
-
-	fmt.Println("sessionID: ", sessionID)
+	redis := c.MustGet("session").(session.Session)
+	userInfo, err := redis.Get(sessionID)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"code":    401,
+			"message": "用户未登陆！",
+			"data":    nil,
+		})
+	}
+	//articleBind.UserId = userInfo.
+	fmt.Println("userInfo: ", userInfo)
 
 	//	初始化文章具体信息结构体
 	//articleDetail := &model.ArticleDetail{

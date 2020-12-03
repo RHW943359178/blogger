@@ -133,7 +133,7 @@ func ValidateLoginStatus(c *gin.Context) {
 
 		redis.Set("userInfo", userInfo)
 		data["session"] = sessionID
-		c.SetCookie(session.SessionContextName, sessionID, options.MaxAge, options.Path, options.Domain, options.Secure, options.HttpOnly)
+		c.SetCookie(session.SessionCookieName, sessionID, options.MaxAge, options.Path, options.Domain, options.Secure, options.HttpOnly)
 	}
 	//	构建返回消息 map
 	resData := map[string]interface{}{
