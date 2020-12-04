@@ -34,7 +34,6 @@ func HandleSaveUserInfo(c *gin.Context) {
 	}
 	//	绑定生成的guid值
 	userBind.UserId = utils.UniqueId()
-	fmt.Printf("userBind: %#v", userBind)
 	//	从service层取数据
 	insertId, err := service.InsertUserInfo(&userBind)
 	if err != nil {
@@ -56,7 +55,6 @@ func HandleSaveUserInfo(c *gin.Context) {
 //  @Router /user/username/select [get]
 func HandleConditionSelect(c *gin.Context) {
 	condition := c.Query("condition")
-	fmt.Println("condition", condition)
 	if condition == "" {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "无效字段",

@@ -34,6 +34,10 @@ func (m *memSession) Load() (err error) {
 	return
 }
 
+func (m *memSession) GetData(string) (data string, err error) {
+	return
+}
+
 func (m *memSession) Get(key string) (value interface{}, err error) {
 	m.rwLock.Lock()
 	defer m.rwLock.Unlock()

@@ -136,3 +136,14 @@ func GetArticleInfoById(articleId int64) (article *model.ArticleDetail, err erro
 	}
 	return
 }
+
+//	根据用户 id 获取全部文章信息
+func GetArticleListByUserId(userId string) (articleList []*model.UserArticle, err error) {
+	//	从数据库取数据
+	articleList, err = db.GetArticleByUserId(userId)
+	if err != nil {
+		log.Fatalln("get data from database failed, err: ", err)
+		return
+	}
+	return
+}

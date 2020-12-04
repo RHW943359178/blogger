@@ -46,3 +46,11 @@ type ArticleBind struct {
 	Username string `json:"username"`
 	Content  string `json:"content"`
 }
+
+//	与用户相关的文章信息
+type UserArticle struct {
+	Id         int64       `db:"id" json:"id"`
+	CategoryId int64       `db:"category_id" json:"categoryId"`
+	Title      string      `db:"title" json:"title"`
+	CreateTime interface{} `db:"create_time" json:"createTime"`
+}

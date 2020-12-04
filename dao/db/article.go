@@ -2,7 +2,6 @@ package db
 
 import (
 	"blogger/model"
-	"fmt"
 	"github.com/jmoiron/sqlx"
 	"log"
 )
@@ -66,7 +65,6 @@ func GetArticleDetail(articleId int64) (articleDetail *model.ArticleDetail, err 
 	if articleId < 0 {
 		return
 	}
-	fmt.Println(articleId, 123)
 	sqlStr := `select id, summary, title, view_count, content, create_time, update_time, comment_count, username, category_id
 				from article where id = ?`
 	err = db.Get(articleDetail, sqlStr, articleId)
@@ -86,5 +84,12 @@ func GetArticleListByCategoryId(categoryId, pageNum, pageSize int) (articleList 
 	sqlStr := `select id, summary, title, view_count, create_time, comment_count, username, category
 				from article where status = 1 and category_id = ? order by create_time desc limit ?, ?`
 	err = db.Select(&articleList, sqlStr, categoryId, pageNum, pageSize)
+	return
+}
+
+//	根据用户id， 查询该用户id下所有的文章
+func GetArticleByUserId(userId string) (articleList []*model.UserArticle, err error) {
+	sqlStr := `select id, category_id, create_time, title from article where user_id = ?`
+	err = db.Select(&articleList, sqlStr, userId)
 	return
 }

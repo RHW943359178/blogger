@@ -30,4 +30,9 @@ func VisitHomeInterface(r *gin.Engine) {
 	根据文章id获取单个文章信息
 	*/
 	group.GET("/getArticleById", controller.HandleGetSingleArticle)
+
+	/**
+	根据用户 id 获取所有文章信息
+	*/
+	group.GET("/getArticleByUserId", utils.SessionMiddleware(), controller.GetAllArticleByUserId)
 }

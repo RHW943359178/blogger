@@ -56,6 +56,15 @@ func (r *redisSession) Load() (err error) {
 	return
 }
 
+func (r *redisSession) GetData(string) (data string, err error) {
+	data, err = r.client.Get(r.id).Result()
+	if err != nil {
+		log.Fatalln("get data form redis failed, err: ", err)
+		return
+	}
+	return
+}
+
 func (r *redisSession) Get(key string) (value interface{}, err error) {
 	r.rwLock.RLock()
 	defer r.rwLock.RLock()
@@ -98,7 +107,6 @@ func (r *redisSession) Save() {
 	//	log.Fatalf("gob encode r.data failed, err: %v\n", err)
 	//	return
 	//}
-	fmt.Printf("data: %#v\n", r.data)
 	//var userId string
 	userInfo := r.data["userInfo"]
 	//	将map转为字符串
@@ -156,7 +164,8 @@ func (r *redisSessionMgr) Init(addr string, options ...string) (err error) {
 
 func (r *redisSessionMgr) GetSession(sessionID string) (sd Session, err error) {
 	sd = NewRedisSession(sessionID, r.client)
-	err = sd.Load()
+	//err = sd.Load()
+	_, err = sd.GetData(sessionID)
 
 	if err != nil {
 		return

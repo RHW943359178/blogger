@@ -36,3 +36,10 @@ type ResponseUserInfo struct {
 	Message string         `json:"message"` //	提示信息
 	Data    *model.ResUser `json:"data"`    //	返回数据
 }
+
+//	ResponseUserArticle	返回这个用户所以的文章
+type ResponseUserArticle struct {
+	Code    int                  `json:"code"`    //	业务响应状态码
+	Message string               `json:"message"` //	提示信息
+	Data    []*model.UserArticle `json:"data"`    //	返回数据
+}

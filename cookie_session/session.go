@@ -23,6 +23,7 @@ type Session interface {
 	ID() string
 	//	加载 redis 数据到 session data
 	Load() error
+	GetData(string) (string, error)
 	//	获取 key 对应的 value 值
 	Get(string) (interface{}, error)
 	//	设置 key 对应的 value 值

@@ -1,10 +1,10 @@
 package controller
 
 import (
-	session "blogger/cookie_session"
 	"blogger/model"
 	"blogger/service"
-	"fmt"
+	"blogger/utils"
+	//"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"strconv"
@@ -32,14 +32,12 @@ func GetAllArticleList(c *gin.Context) {
 	//	从service层取数据
 	condition := c.Query("condition")
 	//	categoryId
-	fmt.Println("condition", condition)
 	var categoryId []string
 	if c.Query("categoryId") == "" { //	categoryId 判空处理
 		categoryId = []string{}
 	} else {
 		categoryId = strings.Split(c.Query("categoryId"), ",")
 	}
-	fmt.Println("categoryId", categoryId)
 	// pageNum 验证
 	var pageNum int
 	if c.Query("pageNum") == "" { //	如果为空，就默认是第一页
@@ -107,18 +105,30 @@ func HandleArticleSave(c *gin.Context) {
 		return
 	}
 	//	验证 session 值并从数据库匹配
-	sessionID := c.MustGet("sessionID").(string)
-	redis := c.MustGet("session").(session.Session)
-	userInfo, err := redis.Get(sessionID)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"code":    401,
-			"message": "用户未登陆！",
-			"data":    nil,
-		})
-	}
-	//articleBind.UserId = userInfo.
-	fmt.Println("userInfo: ", userInfo)
+	//sessionID := c.MustGet("sessionID").(string)
+	//redis := c.MustGet("session").(session.Session)
+	//userInfo, err := redis.GetData(sessionID)
+	//if err != nil {
+	//	c.JSON(http.StatusUnauthorized, gin.H{
+	//		"code":    401,
+	//		"message": "用户未登陆！",
+	//		"data":    nil,
+	//	})
+	//}
+	////	将字符串转为map
+	//tmpUser := make(map[string]string, 0)
+	//err = json.Unmarshal([]byte(userInfo), &tmpUser)
+	//if err != nil {
+	//	c.JSON(http.StatusInternalServerError, gin.H{
+	//		"code":    500,
+	//		"message": fmt.Sprintf("unmarshal data from redis failed, err: %v\n", err),
+	//	})
+	//}
+	tmpUser := utils.UnauthorizedMethod(c)
+	//	将前端传入的 userID和username 传到数据库
+	articleBind.UserId = tmpUser["userId"]
+	articleBind.Username = tmpUser["username"]
+	//fmt.Println("userInfo: ", userInfo)
 
 	//	初始化文章具体信息结构体
 	//articleDetail := &model.ArticleDetail{
@@ -133,20 +143,19 @@ func HandleArticleSave(c *gin.Context) {
 	//		CreateTime:   time.Now(),
 	//	},
 	//}
-	//fmt.Printf("%#v\n", articleBind)
-	////	从service层取数数据
-	//insertId, err := service.ArticleSave(&articleBind)
-	//if err != nil {
-	//	c.JSON(http.StatusInternalServerError, gin.H{
-	//		"message": err,
-	//	})
-	//	return
-	//}
-	//c.JSON(http.StatusOK, gin.H{
-	//	"code":    200,
-	//	"message": "保存文章成功！",
-	//	"data":    insertId,
-	//})
+	//	从service层取数数据
+	insertId, err := service.ArticleSave(&articleBind)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"message": "保存文章成功！",
+		"data":    insertId,
+	})
 }
 
 //	@Tags 根据id获取单个文章信息
@@ -156,7 +165,6 @@ func HandleArticleSave(c *gin.Context) {
 func HandleGetSingleArticle(c *gin.Context) {
 	//	获取参数
 	id := c.Query("articleId")
-	fmt.Println("id: ", id)
 	if id == "" {
 		log.Fatalln("文章参数为空")
 		return
@@ -180,4 +188,27 @@ func HandleGetSingleArticle(c *gin.Context) {
 		"data":    article,
 	})
 
+}
+
+//	@Tags 根据用户 id 查询该类目下所有的文章信息
+//	@Accept application/json
+//	@Produce application/json
+//  @Router /home/getArticleByUserId [get]
+//  @Success 200 {object} ResponseUserArticle
+func GetAllArticleByUserId(c *gin.Context) {
+	//	验证 session 值并从数据库匹配
+	tmpUser := utils.UnauthorizedMethod(c)
+	//	从service层获取数据
+	data, err := service.GetArticleListByUserId(tmpUser["userId"])
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"message": "根据用户id获取文章信息成功",
+		"data":    data,
+	})
 }
