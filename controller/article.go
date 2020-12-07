@@ -212,3 +212,57 @@ func GetAllArticleByUserId(c *gin.Context) {
 		"data":    data,
 	})
 }
+
+//	@Tags 根据文章id修改文章内容
+//	@Accept application/json
+//	@Produce application/json
+//  @Param id body int64 true "文章id"
+//  @Param content body string true "文章内容"
+//  @Param summary body string false "文章内容梗概"
+//  @Param title query string true "文章标题"
+//  @Param categoryId body int64 true "分类id"
+//  @Param openFlag body int true "公开标志"
+//  @Router /home/updateArticleInfo [post]
+//  @Success 200 {object} ResponseUserArticle
+func UpdateArticleInfo(c *gin.Context) {
+	//	验证 session 值并从数据库匹配
+	_ = utils.UnauthorizedMethod(c)
+	var articleBind *model.ArticleDetail
+	err := c.ShouldBind(&articleBind)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": err,
+		})
+		return
+	}
+	//	验证传入参数
+	if articleBind.Id == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "文章id不可为空",
+		})
+		return
+	}
+	if articleBind.Content == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "文章内容不可为空",
+		})
+		return
+	}
+	if articleBind.CategoryId == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "文章分类不可为空",
+		})
+		return
+	}
+	//	从service层获取数据
+	row, err := service.UpdateArticleInfo(articleBind)
+	c.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"message": "修改文章信息成功",
+		"data":    row,
+	})
+}

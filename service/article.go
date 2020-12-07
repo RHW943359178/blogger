@@ -147,3 +147,14 @@ func GetArticleListByUserId(userId string) (articleList []*model.UserArticle, er
 	}
 	return
 }
+
+//	根据用户 id 修改文章信息
+func UpdateArticleInfo(article *model.ArticleDetail) (row interface{}, err error) {
+	//	从 db 层取数据
+	row, err = db.UpdateArticleInfo(article)
+	if err != nil {
+		log.Fatalln("get data from database failed, err: ", err)
+		return
+	}
+	return
+}

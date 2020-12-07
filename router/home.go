@@ -32,6 +32,11 @@ func VisitHomeInterface(r *gin.Engine) {
 	group.GET("/getArticleById", controller.HandleGetSingleArticle)
 
 	/**
+	根据文章id更新文章信息
+	*/
+	group.POST("/updateArticleInfo", utils.SessionMiddleware(), controller.UpdateArticleInfo)
+
+	/**
 	根据用户 id 获取所有文章信息
 	*/
 	group.GET("/getArticleByUserId", utils.SessionMiddleware(), controller.GetAllArticleByUserId)

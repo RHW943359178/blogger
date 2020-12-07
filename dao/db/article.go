@@ -65,7 +65,7 @@ func GetArticleDetail(articleId int64) (articleDetail *model.ArticleDetail, err 
 	if articleId < 0 {
 		return
 	}
-	sqlStr := `select id, summary, title, view_count, content, create_time, update_time, comment_count, username, category_id
+	sqlStr := `select id, summary, title, view_count, content, create_time, update_time, comment_count, username, category_id, open_flag
 				from article where id = ?`
 	err = db.Get(articleDetail, sqlStr, articleId)
 	if err != nil {
@@ -91,5 +91,12 @@ func GetArticleListByCategoryId(categoryId, pageNum, pageSize int) (articleList 
 func GetArticleByUserId(userId string) (articleList []*model.UserArticle, err error) {
 	sqlStr := `select id, category_id, create_time, title from article where user_id = ?`
 	err = db.Select(&articleList, sqlStr, userId)
+	return
+}
+
+//	根据文章id修改文章信息
+func UpdateArticleInfo(article *model.ArticleDetail) (row interface{}, err error) {
+	sqlStr := `update article set content=?, summary=?, title=?, category_id=?, open_flag=? where id = ?`
+	row, err = db.Exec(sqlStr, article.Content, article.Summary, article.Title, article.CategoryId, article.OpenFlag, article.Id)
 	return
 }

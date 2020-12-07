@@ -29,6 +29,7 @@ func UnauthorizedMethod(c *gin.Context) (user map[string]string) {
 			"message": "用户未登陆！",
 			"data":    nil,
 		})
+		return
 	}
 	//	将字符串转为map
 	tmpUser := make(map[string]string, 0)
@@ -38,6 +39,7 @@ func UnauthorizedMethod(c *gin.Context) (user map[string]string) {
 			"code":    500,
 			"message": fmt.Sprintf("unmarshal data from redis failed, err: %v\n", err),
 		})
+		return
 	}
 	return tmpUser
 }
