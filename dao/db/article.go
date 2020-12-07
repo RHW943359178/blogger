@@ -13,7 +13,7 @@ func InsertArticle(article *model.ArticleDetail) (articleId int64, err error) {
 		return
 	}
 	sqlStr := `insert into article(content, summary, title, user_id, username, category_id, view_count, open_flag, comment_count) value(?,?,?,?,?,?,?,?,?)`
-	result, err := db.Exec(sqlStr, article.Content, article.ArticleInfo.Summary, article.ArticleInfo.UserId, article.ArticleInfo.Title, article.ArticleInfo.Username,
+	result, err := db.Exec(sqlStr, article.Content, article.ArticleInfo.Summary, article.ArticleInfo.Title, article.ArticleInfo.UserId, article.ArticleInfo.Username,
 		article.ArticleInfo.ViewCount, article.ArticleInfo.CategoryId, article.ArticleInfo.OpenFlag, article.ArticleInfo.ViewCount)
 	if err != nil {
 		return
@@ -98,5 +98,12 @@ func GetArticleByUserId(userId string) (articleList []*model.UserArticle, err er
 func UpdateArticleInfo(article *model.ArticleDetail) (row interface{}, err error) {
 	sqlStr := `update article set content=?, summary=?, title=?, category_id=?, open_flag=? where id = ?`
 	row, err = db.Exec(sqlStr, article.Content, article.Summary, article.Title, article.CategoryId, article.OpenFlag, article.Id)
+	return
+}
+
+//	根据文章id删除文章信息
+func DeleteArticle(articleId int64) (row interface{}, err error) {
+	sqlStr := `delete from article where id = ?`
+	row, err = db.Exec(sqlStr, articleId)
 	return
 }

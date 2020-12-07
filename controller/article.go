@@ -266,3 +266,44 @@ func UpdateArticleInfo(c *gin.Context) {
 		"data":    row,
 	})
 }
+
+//	@Tags 根据文章id删除文章内容
+//	@Accept application/json
+//	@Produce application/json
+//  @Param id query int64 true "文章id"
+//  @Router /home/article/delete [post]
+//  @Success 200 {object} row int
+func DeleteArticle(c *gin.Context) {
+	//	验证 session 值并从数据库匹配
+	_ = utils.UnauthorizedMethod(c)
+	var articleBind *model.ArticleDetail
+	err := c.ShouldBind(&articleBind)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": err,
+		})
+		return
+	}
+	if articleBind.Id == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "文章id参数异常",
+		})
+		return
+	}
+	//	从server层取数据
+	row, err := service.DeleteArticle(articleBind)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"message": "文章删除成功",
+		"data":    row,
+	})
+}

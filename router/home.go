@@ -40,4 +40,10 @@ func VisitHomeInterface(r *gin.Engine) {
 	根据用户 id 获取所有文章信息
 	*/
 	group.GET("/getArticleByUserId", utils.SessionMiddleware(), controller.GetAllArticleByUserId)
+
+	/**
+	根据用户 id 删除文章
+	*/
+	group.POST("/article/delete", utils.SessionMiddleware(), controller.DeleteArticle)
+
 }

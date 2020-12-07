@@ -158,3 +158,15 @@ func UpdateArticleInfo(article *model.ArticleDetail) (row interface{}, err error
 	}
 	return
 }
+
+//	根据用户 id 删除文章信息
+func DeleteArticle(article *model.ArticleDetail) (row interface{}, err error) {
+	var articleId = article.Id
+	//	从 db 层取数据
+	row, err = db.DeleteArticle(articleId)
+	if err != nil {
+		log.Fatalln("get data from db failed, err: ", err)
+		return
+	}
+	return
+}
