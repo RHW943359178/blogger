@@ -109,11 +109,11 @@ func DeleteArticle(articleId int64) (row interface{}, err error) {
 }
 
 //	修改文章预览数量
-func UpdateViewCount(articleId int64) (row interface{}, err error) {
-	if articleId != 0 {
-		articleId++
+func UpdateViewCount(article *model.ArticleDetail) (row interface{}, err error) {
+	if article.Id != 0 {
+		article.ViewCount++
 	}
-	sqlStr := `update article set view_count where id = ?`
-	row, err = db.Exec(sqlStr, articleId)
+	sqlStr := `update article set view_count=? where id = ?`
+	row, err = db.Exec(sqlStr, article.ViewCount, article.Id)
 	return
 }

@@ -135,7 +135,7 @@ func GetArticleInfoById(articleId int64) (article *model.ArticleDetail, err erro
 		return
 	}
 	//	每次返回成功就修改一次数据的view_count的状态
-	_, err = db.UpdateViewCount(article.Id)
+	_, err = db.UpdateViewCount(article)
 	if err != nil {
 		log.Fatalln("update article view_count failed, err: ", err)
 	}
