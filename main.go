@@ -41,7 +41,7 @@ func main() {
 		panic(err)
 	}
 	//	初始化 mysql 数据库连接
-	dns := "RHW:RHW943359178@tcp(81.69.255.188:3306)/blogger?parseTime=true"
+	dns := "RHW:RHW943359178@tcp(81.69.255.188:3306)/blogger?parseTime=true&loc=Local"
 	err = db.Init(dns)
 	if err != nil {
 		panic(err)
@@ -49,6 +49,7 @@ func main() {
 
 	router.VisitHomeInterface(r)
 	router.VisitUserInterface(r)
+	router.VisitCommonInterface(r)
 
 	//	生成 swagger 文档
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))

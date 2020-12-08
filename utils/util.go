@@ -5,10 +5,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 )
+
+const base_format = "2006-01-02 15:04:05"
 
 func GetRootDir() (rootPath string) {
 	exePath := os.Args[0]
@@ -42,4 +46,23 @@ func UnauthorizedMethod(c *gin.Context) (user map[string]string) {
 		return
 	}
 	return tmpUser
+}
+
+/**
+数据库时间格式转换
+*/
+func DataTimeFormat(t string) (sTime string, err error) {
+	//	参数如果为空
+	//if t == nil {
+	//
+	//}
+	format, err := time.Parse(base_format, t)
+	if err != nil {
+		log.Fatalln("parse time failed, err: ", err)
+		return
+	}
+	sTime = format.Format(base_format)
+	//DefaultTimeLoc := time.Local
+	//loginTime, err := time.ParseInLocation(base_format, t, DefaultTimeLoc)
+	return
 }

@@ -19,8 +19,14 @@ func VisitUserInterface(r *gin.Engine) {
 	查询用户名是否已经注册
 	*/
 	userGroup.GET("username/select", controller.HandleConditionSelect)
+
 	/**
 	用户登录校验
 	*/
 	userGroup.POST("login/validate", utils.SessionMiddleware(), controller.ValidateLoginStatus)
+
+	/**
+	用户上传头像
+	*/
+	userGroup.POST("user/icon/upload", utils.SessionMiddleware(), controller.HandleImgUpload)
 }

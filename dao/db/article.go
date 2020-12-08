@@ -107,3 +107,13 @@ func DeleteArticle(articleId int64) (row interface{}, err error) {
 	row, err = db.Exec(sqlStr, articleId)
 	return
 }
+
+//	修改文章预览数量
+func UpdateViewCount(articleId int64) (row interface{}, err error) {
+	if articleId != 0 {
+		articleId++
+	}
+	sqlStr := `update article set view_count where id = ?`
+	row, err = db.Exec(sqlStr, articleId)
+	return
+}

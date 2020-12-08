@@ -44,3 +44,14 @@ func ValidateStatus(user *model.User) (status int, resUser *model.ResUser) {
 		return
 	}
 }
+
+//	插入用户头像
+func UpdateUserImg(userId, imgUrl string) (row interface{}, err error) {
+	//	从db层取数据
+	row, err = db.InsertUserIcon(userId, imgUrl)
+	if err != nil {
+		log.Fatalln("get img from db failed, err: ", err)
+		return
+	}
+	return
+}

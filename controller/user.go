@@ -141,3 +141,42 @@ func ValidateLoginStatus(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, resData)
 }
+
+//	@Tags 用户上传头像
+func HandleImgUpload(c *gin.Context) {
+	//	验证 session 值并从数据库匹配
+	user := utils.UnauthorizedMethod(c)
+	//	单个文件
+	file, err := c.FormFile("icon")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err,
+		})
+		return
+	}
+	//	给 icon 分配一个id值
+	iconId := utils.UniqueId()
+	dst := fmt.Sprintf("C:/user/icon/%s", iconId)
+	//	上传文件到指定的目录
+	err = c.SaveUploadedFile(file, dst)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err,
+		})
+		return
+	}
+	// 同步数据到数据库
+	_, err = service.UpdateUserImg(user["userId"], iconId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"message": "图片上传成功",
+		"data":    iconId,
+	})
+	return
+}

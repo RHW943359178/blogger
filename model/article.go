@@ -12,11 +12,11 @@ type ArticleInfo struct {
 	ViewCount    uint32 `db:"view_count" json:"viewCount"`
 	CommentCount uint32 `db:"comment_count" json:"commentCount"`
 	//	创建时间
-	CreateTime interface{} `db:"create_time" json:"createTime"`
-	UpdateTime interface{} `db:"update_time" json:"updateTime"`
-	Username   string      `db:"username" json:"username"`
-	UserId     string      `db:"user_id" json:"userId"`
-	OpenFlag   int         `db:"open_flag" json:"openFlag"`
+	CreateTime string `db:"create_time" json:"createTime"`
+	UpdateTime string `db:"update_time" json:"updateTime"`
+	Username   string `db:"username" json:"username"`
+	UserId     string `db:"user_id" json:"userId"`
+	OpenFlag   int    `db:"open_flag" json:"openFlag"`
 }
 
 //	用于文章详情页的实体

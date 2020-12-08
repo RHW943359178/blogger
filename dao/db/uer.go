@@ -62,3 +62,10 @@ func ValidateLogin(username, password string) (status int, user *model.User) {
 	status = 2
 	return
 }
+
+//	插入用户头像
+func InsertUserIcon(userId, imgUrl string) (row interface{}, err error) {
+	sqlStr := `update from user set img_url=? where user_id = ?`
+	row, err = db.Exec(sqlStr, imgUrl, userId)
+	return
+}
