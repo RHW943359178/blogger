@@ -171,15 +171,24 @@ func HandleGetSingleArticle(c *gin.Context) {
 	}
 	articleId, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
-		log.Fatalln("parse id to int failed, err: ", err)
-		return
-	}
-	//	从service层取数据
-	article, err := service.GetArticleInfoById(articleId)
-	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
 		})
+		return
+	}
+	//	从service层取数据
+	article, err, errFlag := service.GetArticleInfoById(articleId)
+	if err != nil {
+		if errFlag == 0 {
+			c.JSON(http.StatusNotFound, gin.H{
+				"code":    404,
+				"message": err,
+			})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": err,
+			})
+		}
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{

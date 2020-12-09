@@ -127,16 +127,19 @@ func ArticleSave(article *model.ArticleDetail) (articleId int64, err error) {
 }
 
 //	根据文章id获取单个文章信息
-func GetArticleInfoById(articleId int64) (article *model.ArticleDetail, err error) {
+func GetArticleInfoById(articleId int64) (article *model.ArticleDetail, err error, errFlag int) {
+	//	错误标志
+	errFlag = 0
 	//	从数据库获取数据
 	article, err = db.GetArticleDetail(articleId)
 	if err != nil {
-		log.Fatalln("get data from database failed, err: ", err)
-		return
+		log.Println("get data from database failed, err: ", err)
+		return nil, err, 0
 	}
 	//	每次返回成功就修改一次数据的view_count的状态
 	_, err = db.UpdateViewCount(article)
 	if err != nil {
+		errFlag = 1
 		log.Fatalln("update article view_count failed, err: ", err)
 	}
 	return

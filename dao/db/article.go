@@ -65,13 +65,13 @@ func GetArticleDetail(articleId int64) (articleDetail *model.ArticleDetail, err 
 	if articleId < 0 {
 		return
 	}
-	sqlStr := `select id, summary, title, view_count, content, create_time, update_time, comment_count, username, category_id, open_flag
+	sqlStr := `select id, summary, title, view_count, content, create_time, update_time, comment_count, user_id, username, category_id, open_flag
 				from article where id = ?`
 	err = db.Get(articleDetail, sqlStr, articleId)
-	if err != nil {
-		log.Fatalln("db.Get failed, err: ", err)
-		return
-	}
+	//if err != nil {
+	//	log.Fatalln("db.Get failed, err: ", err)
+	//	return
+	//}
 	return
 }
 

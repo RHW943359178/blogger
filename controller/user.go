@@ -180,3 +180,32 @@ func HandleImgUpload(c *gin.Context) {
 	})
 	return
 }
+
+//	@Tags 获取用户信息
+//	@Param userId body string true "用户id"
+//  @Success 200 {object} ResponseUserInfo
+//  @Router /user/getUserInfo [post]
+func GetUserInfo(c *gin.Context) {
+	//	获取用户id参数
+	var user *model.ResUser
+	err := c.ShouldBind(&user)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "参数错误",
+		})
+		return
+	}
+	//	从service层取数据
+	user, err = service.GetUserInfo(user.UserId)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": "该用户不存在",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"message": "获取用户信息成功",
+		"data":    user,
+	})
+}

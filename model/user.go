@@ -14,7 +14,9 @@ type User struct {
 
 //	定义校验成功后返回结构体
 type ResUser struct {
-	UserId   string         `json:"userId"`
-	Username string         `json:"username"`
-	ImgUrl   sql.NullString `json:"imgUrl"`
+	UserId       string         `db:"user_id" json:"userId"`
+	Username     string         `db:"username" json:"username"`
+	ImgUrl       sql.NullString `db:"img_url" json:"imgUrl"`
+	ArticleCount int            `db:"article_count" json:"articleCount"`
+	FontCount    int            `db:"font_count" json:"fontCount"`
 }

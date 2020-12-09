@@ -28,5 +28,10 @@ func VisitUserInterface(r *gin.Engine) {
 	/**
 	用户上传头像
 	*/
-	userGroup.POST("user/icon/upload", utils.SessionMiddleware(), controller.HandleImgUpload)
+	userGroup.POST("/icon/upload", utils.SessionMiddleware(), controller.HandleImgUpload)
+
+	/**
+	获取用户信息
+	*/
+	userGroup.POST("/getUserInfo", controller.GetUserInfo)
 }
