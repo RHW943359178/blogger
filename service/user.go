@@ -61,8 +61,7 @@ func GetUserInfo(userId string) (user *model.ResUser, err error) {
 	//	从db层取数据
 	user, err = db.GetUserInfo(userId)
 	if err != nil {
-		log.Fatalln("get userInfo from db failed, err: ", err)
-		return
+		log.Println("get userInfo from db failed, err: ", err)
 	}
 	return
 }

@@ -72,7 +72,7 @@ func InsertUserIcon(userId, imgUrl string) (row interface{}, err error) {
 
 //	根据用户id获取用户信息
 func GetUserInfo(userId string) (user *model.ResUser, err error) {
-	//user = &model.ResUser{}
+	user = &model.ResUser{}
 	sqlStr := `select username, user_id, img_url, font_count, article_count from user where user_Id = ?`
 	err = db.Get(user, sqlStr, userId)
 	return

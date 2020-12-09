@@ -54,3 +54,8 @@ type UserArticle struct {
 	Title      string      `db:"title" json:"title"`
 	CreateTime interface{} `db:"create_time" json:"createTime"`
 }
+
+////	其他文章所需参数结构体
+//type OtherArticle struct {
+//	UserId
+//}

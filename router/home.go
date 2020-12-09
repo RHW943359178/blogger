@@ -46,4 +46,8 @@ func VisitHomeInterface(r *gin.Engine) {
 	*/
 	group.POST("/article/delete", utils.SessionMiddleware(), controller.DeleteArticle)
 
+	/**
+	查询用户其他文章列表
+	*/
+	group.POST("getOtherArticle", controller.GetOtherArticle)
 }

@@ -4,6 +4,8 @@ import (
 	"blogger/model"
 	"blogger/service"
 	"blogger/utils"
+	"fmt"
+
 	//"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -315,4 +317,27 @@ func DeleteArticle(c *gin.Context) {
 		"message": "文章删除成功",
 		"data":    row,
 	})
+}
+
+//	@Tags 根据用户 id 查询该类目下所有的文章信息
+//	@Accept application/json
+//	@Produce application/json
+//  @Router /home/getArticleByUserId [get]
+//  @Success 200 {object} ResponseUserArticle
+func GetOtherArticle(c *gin.Context) {
+	otherArticle := struct {
+		UserId    string `json:"userId"`
+		ArticleId int64  `json:"articleId"`
+		PageNum   int    `json:"pageNum"`
+		PageSize  int    `json:"pageSize"`
+	}{}
+	err := c.ShouldBind(&otherArticle)
+	fmt.Printf("otherArticle: %#v", otherArticle)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": err,
+		})
+		return
+	}
 }
