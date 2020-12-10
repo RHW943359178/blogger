@@ -77,3 +77,9 @@ func GetUserInfo(userId string) (user *model.ResUser, err error) {
 	err = db.Get(user, sqlStr, userId)
 	return
 }
+
+//	根据 userId 获取该作者总文章数和总字数
+func GetAuthorInfo(userId string) (articleCount, fontCount int) {
+
+	sqlStr := `select SUM(CHAR_LENGTH(content)),COUNT(*) from article`
+}

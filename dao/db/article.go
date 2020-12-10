@@ -88,15 +88,24 @@ func GetArticleListByCategoryId(categoryId, pageNum, pageSize int) (articleList 
 }
 
 //	根据用户id， 查询该用户id下所有的文章
-func GetArticleByUserId(userId string, pageSize, pageNum int) (articleList []*model.UserArticle, err error) {
-	var sqlStr string
-	if pageSize == 0 && pageNum == 0 {
-		sqlStr = `select id, category_id, create_time, title from article where user_id = ?`
-		err = db.Select(&articleList, sqlStr, userId)
-	} else {
-		sqlStr = `select id, article_count,  title from article limit ?, ? `
-		err = db.Select(&articleList, sqlStr, (pageNum-1)*pageSize, pageSize)
-	}
+func GetArticleByUserId(userId string) (articleList []*model.UserArticle, err error) {
+	sqlStr := `select id, category_id, create_time, title from article where user_id = ?`
+	err = db.Select(&articleList, sqlStr, userId)
+	return
+}
+
+//	根据用户 id 页码范围查询其他文章
+func GetOtherArticle(userId string, articleId int64, pageSize, pageNum int) (articleList []*model.UserArticle, err error) {
+	sqlStr := `select id, view_count,  title from article  where user_id = ? and id != ? limit ?, ?`
+	err = db.Select(&articleList, sqlStr, userId, articleId, (pageNum-1)*pageSize, pageSize)
+	//err = db.Select(&articleList, sqlStr, userId, articleId, 30, 40)
+	return
+}
+
+//	根据 categoryId 获取推荐文章阅读
+func GetRecommendArticle(categoryId int64, num int) (articleList []*model.UserArticle, err error) {
+	sqlStr := `select id, view_count, title from article where category_id = ? ORDER BY RAND() limit ?`
+	err = db.Select(&articleList, sqlStr, categoryId, num)
 	return
 }
 

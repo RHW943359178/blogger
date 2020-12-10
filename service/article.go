@@ -147,13 +147,8 @@ func GetArticleInfoById(articleId int64) (article *model.ArticleDetail, err erro
 
 //	根据用户 id 获取全部文章信息
 func GetArticleListByUserId(userId string) (articleList []*model.UserArticle, err error) {
-	//	传入pageSize和pageSize
-	var (
-		pageSize = 0
-		pageNum  = 0
-	)
 	//	从数据库取数据
-	articleList, err = db.GetArticleByUserId(userId, pageSize, pageNum)
+	articleList, err = db.GetArticleByUserId(userId)
 	if err != nil {
 		log.Fatalln("get data from database failed, err: ", err)
 		return
@@ -180,6 +175,29 @@ func DeleteArticle(article *model.ArticleDetail) (row interface{}, err error) {
 	if err != nil {
 		log.Fatalln("get data from db failed, err: ", err)
 		return
+	}
+	return
+}
+
+//	根据userId获取其他文章
+func GetOtherArticle(userId string, articleId int64, pageSize, pageNum int) (articleList []*model.UserArticle, err error) {
+	//	从db层取数据
+	articleList, err = db.GetOtherArticle(userId, articleId, pageSize, pageNum)
+	if err != nil {
+		log.Println("get other from db failed, err: ", err)
+	}
+	return
+}
+
+//	根据 categoryId 获取推荐文章
+func GetRecommendArticle(categoryId int64, num int) (articleList []*model.UserArticle, err error) {
+	//	验证 num 参数
+	if num < 1 || num > 10 {
+		return
+	}
+	articleList, err = db.GetRecommendArticle(categoryId, num)
+	if err != nil {
+		log.Println("get recommend article from db failed, err: ", err)
 	}
 	return
 }

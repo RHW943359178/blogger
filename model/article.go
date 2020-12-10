@@ -53,6 +53,7 @@ type UserArticle struct {
 	CategoryId int64       `db:"category_id" json:"categoryId"`
 	Title      string      `db:"title" json:"title"`
 	CreateTime interface{} `db:"create_time" json:"createTime"`
+	ViewCount  int         `db:"view_count" json:"viewCount"`
 }
 
 ////	其他文章所需参数结构体

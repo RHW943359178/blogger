@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//	访问主页面接口
+//	访问文章相关接口
 func VisitHomeInterface(r *gin.Engine) {
 	//	主页路由组
 	group := r.Group("/home")
@@ -49,5 +49,10 @@ func VisitHomeInterface(r *gin.Engine) {
 	/**
 	查询用户其他文章列表
 	*/
-	group.POST("getOtherArticle", controller.GetOtherArticle)
+	group.POST("/getOtherArticle", controller.GetOtherArticle)
+
+	/**
+	获取推荐文章列表
+	*/
+	group.GET("/article/recommend", controller.GetRecommendArticle)
 }

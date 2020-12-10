@@ -4,8 +4,6 @@ import (
 	"blogger/model"
 	"blogger/service"
 	"blogger/utils"
-	"fmt"
-
 	//"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -319,12 +317,13 @@ func DeleteArticle(c *gin.Context) {
 	})
 }
 
-//	@Tags 根据用户 id 查询该类目下所有的文章信息
+//	@Tags 根据用户 id 查询该用户的其他文章
 //	@Accept application/json
 //	@Produce application/json
-//  @Router /home/getArticleByUserId [get]
+//  @Router /home/getOtherArticle [post]
 //  @Success 200 {object} ResponseUserArticle
 func GetOtherArticle(c *gin.Context) {
+	//	绑定参数结构体
 	otherArticle := struct {
 		UserId    string `json:"userId"`
 		ArticleId int64  `json:"articleId"`
@@ -332,7 +331,6 @@ func GetOtherArticle(c *gin.Context) {
 		PageSize  int    `json:"pageSize"`
 	}{}
 	err := c.ShouldBind(&otherArticle)
-	fmt.Printf("otherArticle: %#v", otherArticle)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code":    400,
@@ -340,4 +338,70 @@ func GetOtherArticle(c *gin.Context) {
 		})
 		return
 	}
+	//	从service层取数据
+	articleList, err := service.GetOtherArticle(otherArticle.UserId, otherArticle.ArticleId, otherArticle.PageSize, otherArticle.PageNum)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"message": "获取其他文章列表成功",
+		"data":    articleList,
+	})
+	return
+
+}
+
+//	@Tags 根据 categoryId 查询推荐文章
+//	@Accept application/json
+//	@Produce application/json
+//  @Router /home/getRecommendArticle [post]
+//  @Success 200 {object} ResponseUserArticle
+func GetRecommendArticle(c *gin.Context) {
+	//	分类id
+	category := c.Query("categoryId")
+	//	推荐文章条数
+	num := c.Query("num")
+	// 验证参数
+	if category == "" || num == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "请求参数错误",
+		})
+		return
+	}
+	var (
+		categoryId  int64
+		number      int
+		err         error
+		articleList []*model.UserArticle
+	)
+	//	将参数转成指定类型
+	categoryId, err = strconv.ParseInt(category, 10, 64)
+	number, err = strconv.Atoi(num)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": err,
+		})
+		return
+	}
+	//	从 service 层取数据
+	articleList, err = service.GetRecommendArticle(categoryId, number)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"message": "获取推荐文章列表成功",
+		"data":    articleList,
+	})
 }
