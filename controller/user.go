@@ -209,3 +209,37 @@ func GetUserInfo(c *gin.Context) {
 		"data":    user,
 	})
 }
+
+//	@Tags 获取用户文章数和总字数
+//	@Param userId query string true "用户id"
+//  @Success 200 {object} ResponseUserInfo
+//  @Router /user/articleInfo [get]
+func GetArticleFontCount(c *gin.Context) {
+	//	获取用户id
+	userId := c.Query("userId")
+	if userId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "userId为空",
+		})
+		return
+	}
+	//	从 service 层取数据
+	fontCount, articleCount, err := service.GetUserArticleInfo(userId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": err,
+		})
+		return
+	}
+	//	构建返回值 map
+	data := make(map[string]int)
+	data["fontCount"] = fontCount
+	data["articleCount"] = articleCount
+	c.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"message": "获取用户文章数和字数成功",
+		"data":    data,
+	})
+}

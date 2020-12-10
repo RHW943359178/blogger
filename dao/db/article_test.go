@@ -2,8 +2,8 @@ package db
 
 import (
 	"blogger/model"
+	"fmt"
 	"testing"
-	"time"
 )
 
 func init() {
@@ -23,7 +23,7 @@ func TestInsertArticle(t *testing.T) {
 	article.ArticleInfo.CategoryId = 1
 	article.ArticleInfo.CommentCount = 1
 	article.Content = "ahsawosxjawpal this is text this is a text this is a text"
-	article.ArticleInfo.CreateTime = time.Now()
+	article.ArticleInfo.CreateTime = ""
 	article.ArticleInfo.Title = "go practice"
 	article.ArticleInfo.Username = "rhw"
 	article.ArticleInfo.Summary = "ahsawosxjawpal"
@@ -53,4 +53,13 @@ func TestGetArticleDetail(t *testing.T) {
 		return
 	}
 	t.Logf("detail: %#v\n", detail)
+}
+
+//	查询用户下的文章数和字数
+func TestGetAuthorInfo(t *testing.T) {
+	user_id := "90b74dc5843d433e187310d0eb8eda89"
+	fontCount, articleCount, err := GetAuthorInfo(user_id)
+	fmt.Printf("fontCount: %#v\n", fontCount)
+	fmt.Printf("err: %v\n", err)
+	fmt.Printf("articleCount: %#v", articleCount)
 }

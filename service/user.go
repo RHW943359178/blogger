@@ -65,3 +65,13 @@ func GetUserInfo(userId string) (user *model.ResUser, err error) {
 	}
 	return
 }
+
+//	获取用户的总文章数和总字数
+func GetUserArticleInfo(userId string) (fontCount, articleCount int, err error) {
+	//	从 db 层取数据
+	fontCount, articleCount, err = db.GetAuthorInfo(userId)
+	if err != nil {
+		log.Println("get article_count, font_count from db failed, err: ", err)
+	}
+	return
+}

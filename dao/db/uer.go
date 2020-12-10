@@ -79,7 +79,14 @@ func GetUserInfo(userId string) (user *model.ResUser, err error) {
 }
 
 //	根据 userId 获取该作者总文章数和总字数
-func GetAuthorInfo(userId string) (articleCount, fontCount int) {
-
-	sqlStr := `select SUM(CHAR_LENGTH(content)),COUNT(*) from article`
+func GetAuthorInfo(userId string) (fontCount, articleCount int, err error) {
+	data := struct {
+		FontCount    int `db:"SUM(CHAR_LENGTH(content))" json:"fontCount"`
+		ArticleCount int `db:"COUNT(*)" json:"articleCount"`
+	}{}
+	sqlStr := `select SUM(CHAR_LENGTH(content)), COUNT(*) from article where user_id = ?`
+	err = db.Get(&data, sqlStr, userId)
+	fontCount = data.FontCount
+	articleCount = data.ArticleCount
+	return
 }

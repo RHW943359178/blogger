@@ -34,4 +34,9 @@ func VisitUserInterface(r *gin.Engine) {
 	获取用户信息
 	*/
 	userGroup.POST("/getUserInfo", controller.GetUserInfo)
+
+	/**
+	获取用户作者所以文章篇数和总字数
+	*/
+	userGroup.GET("/articleInfo", controller.GetArticleFontCount)
 }
