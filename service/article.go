@@ -149,9 +149,13 @@ func GetArticleInfoById(articleId int64) (article *model.ArticleDetail, err erro
 func GetArticleListByUserId(userId string) (articleList []*model.UserArticle, err error) {
 	//	从数据库取数据
 	articleList, err = db.GetArticleByUserId(userId)
+	//	如果从数据库取出的数据为空，也因该返回给前端空的 切片 而不是 null
+	if articleList == nil {
+		articleList = []*model.UserArticle{}
+	}
+	log.Println(articleList, 123)
 	if err != nil {
-		log.Fatalln("get data from database failed, err: ", err)
-		return
+		log.Println("get data from database failed, err: ", err)
 	}
 	return
 }

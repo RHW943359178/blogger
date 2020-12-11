@@ -243,3 +243,19 @@ func GetArticleFontCount(c *gin.Context) {
 		"data":    data,
 	})
 }
+
+//	@Tags 用户头像上传
+//	@Param userId query string true "用户id"
+//  @Success 200 {object} ResponseUserInfo
+//  @Router /user/articleInfo [get]
+func UserIconUpload(c *gin.Context) {
+	file, err := c.FormFile("user_icon")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+	log.Println(file.Filename, 123)
+	//dst := fmt.Sprintf("http://81.69.255.188/C:/user_icon/%s", file.Filename)
+}

@@ -46,7 +46,10 @@ func GetAllArticleList(c *gin.Context) {
 		pageNum, err = strconv.Atoi(c.Query("pageNum"))
 	}
 	if err != nil {
-		log.Fatalln("err", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": err,
+		})
 		return
 	}
 	//	pageSize 验证
@@ -57,7 +60,10 @@ func GetAllArticleList(c *gin.Context) {
 		pageSize, err = strconv.Atoi(c.Query("pageSize"))
 	}
 	if err != nil {
-		log.Fatalln("err", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": err,
+		})
 		return
 	}
 	articleList, err := service.GetArticleListByCondition(condition, categoryId, pageNum, pageSize)
