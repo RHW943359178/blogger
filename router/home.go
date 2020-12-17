@@ -9,7 +9,7 @@ import (
 //	访问文章相关接口
 func VisitHomeInterface(r *gin.Engine) {
 	//	主页路由组
-	group := r.Group("/home")
+	group := r.Group("/blogger/home")
 
 	/*
 		获取所有分类列表

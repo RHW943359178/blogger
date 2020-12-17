@@ -146,9 +146,9 @@ func GetArticleInfoById(articleId int64) (article *model.ArticleDetail, err erro
 }
 
 //	根据用户 id 获取全部文章信息
-func GetArticleListByUserId(userId string) (articleList []*model.UserArticle, err error) {
+func GetArticleListByUserId(userId string, pageSize, pageNum int) (articleList []*model.UserArticle, err error) {
 	//	从数据库取数据
-	articleList, err = db.GetArticleByUserId(userId)
+	articleList, err = db.GetArticleByUserId(userId, pageSize, pageNum)
 	//	如果从数据库取出的数据为空，也因该返回给前端空的 切片 而不是 null
 	if articleList == nil {
 		articleList = []*model.UserArticle{}

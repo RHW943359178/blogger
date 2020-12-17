@@ -9,7 +9,7 @@ import (
 //	访问用户相关接口
 func VisitUserInterface(r *gin.Engine) {
 	//	用户相关理由组
-	userGroup := r.Group("/user")
+	userGroup := r.Group("/blogger/user")
 	/**
 	用户信息保存接口
 	*/

@@ -1,0 +1,4 @@
+host: localhost
+port: 8000
+mysql_addr: RHW:RHW943359178@tcp(81.69.255.188:3306)/blogger?parseTime=true&loc=Local
+redis_addr: 81.69.255.188:6379

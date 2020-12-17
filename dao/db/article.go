@@ -88,9 +88,14 @@ func GetArticleListByCategoryId(categoryId, pageNum, pageSize int) (articleList 
 }
 
 //	根据用户id， 查询该用户id下所有的文章
-func GetArticleByUserId(userId string) (articleList []*model.UserArticle, err error) {
-	sqlStr := `select id, category_id, create_time, title from article where user_id = ?`
-	err = db.Select(&articleList, sqlStr, userId)
+func GetArticleByUserId(userId string, pageSize, pageNum int) (articleList []*model.UserArticle, err error) {
+	if pageSize == 0 && pageNum == 0 {
+		sqlStr := `select id, category_id, create_time, title from article where user_id = ?`
+		err = db.Select(&articleList, sqlStr, userId)
+	} else {
+		sqlStr := `select id, category_id, create_time, title, summary from article where user_id = ? limit ?, ?`
+		err = db.Select(&articleList, sqlStr, userId, (pageNum-1)*pageSize, pageSize)
+	}
 	return
 }
 

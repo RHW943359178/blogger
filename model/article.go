@@ -52,6 +52,7 @@ type UserArticle struct {
 	Id         int64       `db:"id" json:"id"`
 	CategoryId int64       `db:"category_id" json:"categoryId"`
 	Title      string      `db:"title" json:"title"`
+	Summary    string      `db:"summary" json:"summary"`
 	CreateTime interface{} `db:"create_time" json:"createTime"`
 	ViewCount  int         `db:"view_count" json:"viewCount"`
 }

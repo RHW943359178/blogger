@@ -46,10 +46,7 @@ func GetAllArticleList(c *gin.Context) {
 		pageNum, err = strconv.Atoi(c.Query("pageNum"))
 	}
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code":    400,
-			"message": err,
-		})
+		log.Fatalln("err", err)
 		return
 	}
 	//	pageSize 验证
@@ -60,10 +57,7 @@ func GetAllArticleList(c *gin.Context) {
 		pageSize, err = strconv.Atoi(c.Query("pageSize"))
 	}
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code":    400,
-			"message": err,
-		})
+		log.Fatalln("err", err)
 		return
 	}
 	articleList, err := service.GetArticleListByCondition(condition, categoryId, pageNum, pageSize)
@@ -211,10 +205,36 @@ func HandleGetSingleArticle(c *gin.Context) {
 //  @Router /home/getArticleByUserId [get]
 //  @Success 200 {object} ResponseUserArticle
 func GetAllArticleByUserId(c *gin.Context) {
-	//	验证 session 值并从数据库匹配
-	tmpUser := utils.UnauthorizedMethod(c)
-	//	从service层获取数据
-	data, err := service.GetArticleListByUserId(tmpUser["userId"])
+	//	定义参数类型
+	var (
+		err  error
+		size int
+		num  int
+		data []*model.UserArticle
+	)
+
+	//	从请求中获取参数，有则为无登录请求，无则为登录时请求
+	userId := c.Query("userId")     //	用户id
+	pageSize := c.Query("pageSize") //	页面范围
+	pageNum := c.Query("pageNum")   //	页面数
+
+	if userId == "" && pageSize == "" && pageNum == "" {
+		//	验证 session 值并从数据库匹配
+		tmpUser := utils.UnauthorizedMethod(c)
+		//	从service层获取数据
+		data, err = service.GetArticleListByUserId(tmpUser["userId"], 0, 0)
+	} else {
+		size, err = strconv.Atoi(pageSize)
+		num, err = strconv.Atoi(pageNum)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": err,
+			})
+			return
+		}
+		data, err = service.GetArticleListByUserId(userId, size, num)
+	}
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
